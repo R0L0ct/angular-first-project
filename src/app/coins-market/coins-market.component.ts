@@ -23,6 +23,7 @@ export class CoinsMarketComponent implements OnInit {
 	titles: string[] = ['#', 'Coin', 'Price', 'Price Change', '24h Volume'];
 
 	searchText = '';
+	isLoading = false;
 
 	searchCoin() {
 		this.filteredCoins = this.coins.filter(
@@ -35,12 +36,14 @@ export class CoinsMarketComponent implements OnInit {
 	constructor(private http: HttpClient) { }
 
 	ngOnInit() {
+		this.isLoading = true;
 		this.http
 			.get<Coin[]>(
 				'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false'
 			)
 			.subscribe(
 				(res) => {
+					this.isLoading = false;
 					this.coins = res;
 					this.filteredCoins = res;
 				},
